@@ -54,20 +54,13 @@ public class MessageController {
 
     //UPDATE
     @PutMapping("/message/update/{id}")
-    public ResponseEntity<Message> updateMessage(@PathVariable int id, @RequestBody Message message) {
+    public ResponseEntity<?> updateMessage(@PathVariable int id, @RequestBody Message message) {
         //всё-таки меня напрягает, что id и message - передаются по-разному
         //если id будет отличаться от message.getId(); то будет работать не так как ожидается
         //поэтому лучше fail fast или еще лучше переработать логику функции
         //и вместо объекта message должна возвращаться ошибка, но это еще Exception Handler нужно писать + исключения
         if(id != message.getId()){
-            return new ResponseEntity<>(
-                    Message.builder()
-                            .id(-1)
-                            .title("ID в запросе и в объекте не совпадают!")
-                            .text("ID в запросе и в объекте не совпадают!")
-                            .time(LocalDateTime.now())
-                            .build(),
-                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("ID в запросе и в объекте не совпадают!", HttpStatus.BAD_REQUEST);
         }
 
         var status = messageService.getById(id).isPresent() ? HttpStatus.OK : HttpStatus.CREATED;
@@ -80,7 +73,5 @@ public class MessageController {
     public void deleteMessage(@PathVariable int id) {
         messageService.deleteMessage(id);
     }
-
-
 
 }
