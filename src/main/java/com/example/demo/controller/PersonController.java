@@ -40,7 +40,7 @@ public class PersonController {
                 new ResponseEntity<>(message , HttpStatus.OK)
                 : new ResponseEntity<>("Такого сообщения нет у пользователя!" , HttpStatus.BAD_REQUEST);
     }
-@JoinColumn
+
     @GetMapping("/persons/{id}/all_messages")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable int id, @RequestBody Message message){
         return new ResponseEntity<>(personService.getAllMessages(id, message), HttpStatus.OK);
