@@ -5,8 +5,8 @@ import com.example.demo.dto.Person;
 import com.example.demo.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.time.LocalDateTime;
 
 @Service
 public class PersonService {
@@ -18,9 +18,14 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public Person addMessage(@PathVariable int id, @RequestBody Message message) {
-        Person person = personRepository.findById(id).get();
-        person.addMessage(message);
+
+    public Person addMessage(int id, Message message) {
+        personRepository.findById(id).ifPresent(person ->{
+            message.setPerson(person);
+            message.setTime(LocalDateTime.now());
+            person.addMessage(message);
+        });
+
         return personRepository.save(person);
     }
 }

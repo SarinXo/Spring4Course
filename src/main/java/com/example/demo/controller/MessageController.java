@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.Message;
 import com.example.demo.repository.MessageRepository;
 import com.example.demo.service.MessageService;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +28,6 @@ public class MessageController {
     @Autowired
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
-    }
-
-    @RequestMapping("/add")
-    void initDB(){
-        messageService.addMessage(new Message(1, "message1", LocalDateTime.now()));
-        messageService.addMessage(new Message(2, "message2", LocalDateTime.now()));
-        messageService.addMessage(new Message(3, "message3", LocalDateTime.now()));
-        messageService.addMessage(new Message(4, "message4", LocalDateTime.now()));
-        messageService.addMessage(new Message(5, "message5", LocalDateTime.now()));
-        messageService.addMessage(new Message(6, "message6", LocalDateTime.now()));
     }
 
     //CREATE
@@ -69,11 +60,17 @@ public class MessageController {
         //поэтому лучше fail fast или еще лучше переработать логику функции
         //и вместо объекта message должна возвращаться ошибка, но это еще Exception Handler нужно писать + исключения
         if(id != message.getId()){
-            return new ResponseEntity<>(new Message(-1, "ID в запросе и в объекте не совпадают!", LocalDateTime.now()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(
+                    Message.builder()
+                            .id(-1)
+                            .title("ID в запросе и в объекте не совпадают!")
+                            .text("ID в запросе и в объекте не совпадают!")
+                            .time(LocalDateTime.now())
+                            .build(),
+                    HttpStatus.BAD_REQUEST);
         }
 
         var status = messageService.getById(id).isPresent() ? HttpStatus.OK : HttpStatus.CREATED;
-        // у меня изначально записи заменялись при обновлении.
         messageService.updateMessage(message);
         return new ResponseEntity<>(message, status);
     }

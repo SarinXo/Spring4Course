@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import org.hibernate.proxy.HibernateProxy;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Builder
 @Getter
 @Setter
 @ToString
@@ -37,6 +39,7 @@ public class Message{
     @JsonIgnore
     @ToString.Exclude
     private Person person;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

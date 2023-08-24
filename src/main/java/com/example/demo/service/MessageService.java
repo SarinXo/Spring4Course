@@ -16,8 +16,6 @@ public class MessageService {
     @Autowired
     public MessageService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
-        //Можно использовать FlyWay миграции
-
     }
 
     public Optional<Message> getById(int id){
@@ -34,6 +32,7 @@ public class MessageService {
 
     public Message addMessage(Message message){
         return messageRepository.save(message);
+        //,70
     }
 
     public void updateMessage(Message message){
