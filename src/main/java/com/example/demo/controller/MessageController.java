@@ -65,7 +65,7 @@ public class MessageController {
 
     //UPDATE
     @PutMapping("/message/update/{id}")
-    public ResponseEntity<Message>  updatePerson(@PathVariable int id, @RequestBody Message message) {
+    public ResponseEntity<Message>  updateMessage(@PathVariable int id, @RequestBody Message message) {
         boolean isFind = false;
         for(Message m: messages){
             if(m.getId() == id){
@@ -84,7 +84,7 @@ public class MessageController {
 
     //DELETE
     @DeleteMapping("/messages/delete/{id}")
-    public void deletePerson(@PathVariable int id) {
+    public void deleteMessage(@PathVariable int id) {
         messages.removeIf(m -> m.getId() == id);
     }
 }
