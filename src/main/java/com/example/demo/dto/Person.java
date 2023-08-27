@@ -40,7 +40,7 @@ public class Person {
     private LocalDate birthday;
 
     @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     @ToString.Exclude
     private List<Message> messages = new ArrayList<>();
 

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class MessageService {
 
-    private final MessageRepository messageRepository;
+    final MessageRepository messageRepository;
 
     @Autowired
     public MessageService(MessageRepository messageRepository) {
@@ -32,7 +32,6 @@ public class MessageService {
 
     public Message addMessage(Message message){
         return messageRepository.save(message);
-        //,70
     }
 
     public void updateMessage(Message message){

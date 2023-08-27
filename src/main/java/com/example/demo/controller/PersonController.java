@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.dto.Message;
 import com.example.demo.dto.Person;
 import com.example.demo.service.PersonService;
-import jakarta.persistence.JoinColumn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +18,29 @@ import java.util.List;
 @Controller
 public class PersonController {
 
-    PersonService personService;
+    private final PersonService personService;
 
     @Autowired
     public PersonController(PersonService personService) {
         this.personService = personService;
     }
 
-    @PostMapping("/persons/{id}/messages")
+    /*
+    *       {
+    *           "id": 9,
+    *           "text": "333",
+    *           "title": "dsfd",
+    *           "time": "2023-08-27T19:38:17.665763"
+    *       }
+    *   examlpe
+    */
+    @PostMapping("/persons/{id}/message")
     public ResponseEntity<?> addMessage(@PathVariable int id, @RequestBody Message message) {
-        Person person = personService.addMessage(id, message);
-        return  person.isEmpty() ?
-                new ResponseEntity<>("такого пользователя не существует!" , HttpStatus.BAD_REQUEST)
-                : new ResponseEntity<>(person , HttpStatus.OK);
+        Person person = personService.saveMessage(id, message);
+        // по хорошему все-таки сделать обработчик ошибок...
+        return  !person.isEmpty() ?
+                new ResponseEntity<>(person , HttpStatus.OK)
+                : new ResponseEntity<>("такого пользователя не существует!" , HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/persons/{id}/message")
@@ -42,8 +51,10 @@ public class PersonController {
     }
 
     @GetMapping("/persons/{id}/all_messages")
-    public ResponseEntity<List<Message>> getAllMessages(@PathVariable int id, @RequestBody Message message){
-        return new ResponseEntity<>(personService.getAllMessages(id, message), HttpStatus.OK);
+    public ResponseEntity<List<Message>> getAllMessages(@PathVariable int id){
+        List<Message> messages = personService.getAllMessages(id);
+        var status = messages.isEmpty() ? HttpStatus.BAD_REQUEST : HttpStatus.OK;
+        return new ResponseEntity<>(messages, status);
     }
 
 }
