@@ -44,7 +44,7 @@ public class MessageController {
         return new ResponseEntity<>(message, status);
     }
 
-    @GetMapping("/message/{id}")
+    @GetMapping("/messages/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable int id){
         Optional<Message> message = messageService.getById(id);
         return message.map(
@@ -53,7 +53,7 @@ public class MessageController {
     }
 
     //UPDATE
-    @PutMapping("/message/update/{id}")
+    @PutMapping("/messages/{id}")
     public ResponseEntity<?> updateMessage(@PathVariable int id, @RequestBody Message message) {
         //всё-таки меня напрягает, что id и message - передаются по-разному
         //если id будет отличаться от message.getId(); то будет работать не так как ожидается
@@ -69,7 +69,7 @@ public class MessageController {
     }
 
     //DELETE
-    @DeleteMapping("/messages/delete/{id}")
+    @DeleteMapping("/messages/{id}")
     public void deleteMessage(@PathVariable int id) {
         messageService.deleteMessage(id);
     }

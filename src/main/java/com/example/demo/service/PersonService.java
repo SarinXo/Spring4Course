@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -50,10 +49,25 @@ public class PersonService {
         return true;
     }
 
+    public Person savePerson(Person person){
+        return personRepository.save(person);
+    }
+
     public List<Message> getAllMessages(int id) {
         return personRepository.getPersonById(id)
                 .map(Person::getMessages)
                 .orElse(List.of());
+    }
+
+    public List<Person> getAllPersons(){
+        return personRepository.getAllBy();
+    }
+
+    public boolean existById(int id){
+        return personRepository.existsById(id);
+    }
+    public void deletePerson(int id){
+        personRepository.deleteById(id);
     }
 
     public Optional<Person> getPersonById(int id){
